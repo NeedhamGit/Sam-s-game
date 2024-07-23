@@ -27,11 +27,17 @@ public class NewBehaviourScript : MonoBehaviour
 
     void PlayerMovement()
     {
+         float horizontalSpeed = 2.0F;
+         float verticalSpeed = 2.0F;
+        float h = horizontalSpeed * Input.GetAxis("Mouse X");
+        float v = verticalSpeed * Input.GetAxis("Mouse Y");
+        transform.Rotate(0,h,0);
         float _horizontalInput = Input.GetAxis("Horizontal");
-        Vector3 _moveDirection = new Vector3(_horizontalInput, 0, 0);
-        Vector3 _playerVelocity =  _moveDirection * _movespeed;
-
-        if (Physics.Raycast(transform.position, -Vector3.up, 1.1f))
+        float _verticalInput = Input.GetAxis("Vertical");
+        Vector3 _moveDirection = new Vector3(_horizontalInput, 0, _verticalInput);
+        Vector3 _playerVelocity = transform.rotation*_moveDirection.normalized * _movespeed;
+        
+        if (_characterController.isGrounded || Physics.Raycast(transform.position, -Vector3.up, 1.1f))
         {  
             if(_yVelocity < 0)
             {
