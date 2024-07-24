@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
@@ -23,6 +24,24 @@ public class NewBehaviourScript : MonoBehaviour
     {
         PlayerMovement();
         PlayerFall();
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        //Check for a match with the specific tag on any GameObject that collides with your GameObject
+        if (collision.gameObject.tag.ToString() == "Enemy")
+        {
+            print(transform.position.y > (collision.gameObject.transform.position.y + 1));
+            if (transform.position.y > (collision.gameObject.transform.position.y+.5)) {
+
+                _yVelocity = _jumpHeight;
+                Destroy(collision.gameObject);
+                
+            } else
+            {
+                resetPlayer();
+            }
+        }
     }
 
     void PlayerMovement()
@@ -59,8 +78,15 @@ public class NewBehaviourScript : MonoBehaviour
     void PlayerFall()
     {
         if(transform.position.y <-5f) {
-            transform.position = _startPosition;
-            _yVelocity = 0;
+            resetPlayer();
         }
     }
+    void resetPlayer()
+    {
+        print("reset");
+        transform.position = _startPosition;
+        _yVelocity = 0;
+
+    }    
+
 }
