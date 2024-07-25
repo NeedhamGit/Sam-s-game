@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private float _jumpHeight = 30f;
     private Vector3 _startPosition;
     private float _yVelocity;
+    int coinCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +44,18 @@ public class NewBehaviourScript : MonoBehaviour
                 resetPlayer();
             }
         }
+        if (collision.gameObject.tag.ToString() == "coin")
+        {
+            if (!collision.gameObject.GetComponent<AudioSource>().isPlaying)
+            {
+                coinCount++;
+                collision.gameObject.GetComponent<AudioSource>().Play();
+
+                GameObject.Find("coin UI").GetComponent<TextMeshProUGUI>().text = "Coins:"+coinCount.ToString();
+            }
+            
+
+        }
     }
 
     void PlayerMovement()
@@ -56,9 +70,9 @@ public class NewBehaviourScript : MonoBehaviour
         Vector3 _moveDirection = new Vector3(_horizontalInput, 0, _verticalInput);
         Vector3 _playerVelocity = transform.rotation*_moveDirection.normalized * _movespeed;
         
-        if (_characterController.isGrounded || Physics.Raycast(transform.position, -Vector3.up, 1.1f))
+        if (_characterController.isGrounded || Physics.Raycast(transform.position, -Vector3.up, 1.5f))
         {  
-            if(_yVelocity < 0)
+            if(_yVelocity < 0 && Physics.Raycast(transform.position, -Vector3.up, 1.1f))
             {
                 _yVelocity = -_gravity;
             }

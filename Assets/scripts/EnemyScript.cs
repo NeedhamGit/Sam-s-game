@@ -8,7 +8,7 @@ public class EnemyScript : MonoBehaviour
     private CharacterController _characterController;
     public GameObject target;
     [SerializeField] private float _gravity = .6f;
-    public float speed = 5.0f;
+    private float speed = 7.0f;
     public float _yVelocity;
     // Start is called before the first frame update
     void Start()
