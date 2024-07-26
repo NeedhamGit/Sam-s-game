@@ -8,12 +8,13 @@ using UnityEngine;
 public class NewBehaviourScript : MonoBehaviour
 {
     private CharacterController _characterController;
-    [SerializeField] private float _movespeed = 2f;
-    [SerializeField] private float _gravity = .6f;
-    [SerializeField] private float _jumpHeight = 30f;
+    [SerializeField] private float _movespeed;
+    [SerializeField] private float _gravity;
+    [SerializeField] private float _jumpHeight;
     private Vector3 _startPosition;
     private float _yVelocity;
     int coinCount = 0;
+    bool doubleJump = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,7 +51,7 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 coinCount++;
                 collision.gameObject.GetComponent<AudioSource>().Play();
-
+                _startPosition = transform.position;
                 GameObject.Find("coin UI").GetComponent<TextMeshProUGUI>().text = "Coins:"+coinCount.ToString();
             }
             
@@ -69,7 +70,23 @@ public class NewBehaviourScript : MonoBehaviour
         float _verticalInput = Input.GetAxis("Vertical");
         Vector3 _moveDirection = new Vector3(_horizontalInput, 0, _verticalInput);
         Vector3 _playerVelocity = transform.rotation*_moveDirection.normalized * _movespeed;
-        
+
+
+        //Right mouse button makes the cursor lock
+        if (Input.GetMouseButtonDown(1))
+        {
+           if( Cursor.lockState == CursorLockMode.Locked)
+            Cursor.lockState = CursorLockMode.None;
+            else if( Cursor.lockState == CursorLockMode.None)
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        //double jump code for andrew
+        if (Input.GetButtonDown("Jump") && doubleJump)
+        {
+            _yVelocity = _jumpHeight;
+            doubleJump = false;
+        }
         if (_characterController.isGrounded || Physics.Raycast(transform.position, -Vector3.up, 1.5f))
         {  
             if(_yVelocity < 0 && Physics.Raycast(transform.position, -Vector3.up, 1.1f))
@@ -80,6 +97,7 @@ public class NewBehaviourScript : MonoBehaviour
             if (Input.GetButtonDown("Jump"))
             {
                 _yVelocity = _jumpHeight;
+                doubleJump = true;
             }
         } else if(_playerVelocity.y > -3f)
         {

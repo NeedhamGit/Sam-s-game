@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
@@ -10,6 +11,8 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private float _gravity = .6f;
     private float speed = 7.0f;
     public float _yVelocity;
+
+    public GameObject coin;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,5 +45,11 @@ public class EnemyScript : MonoBehaviour
         }
         movevec.y = _yVelocity;
         _characterController.Move(movevec * Time.deltaTime);
+    }
+
+    private void OnDestroy()
+    {
+        print("coinSpawn");
+        Instantiate(coin, transform.position, Quaternion.Euler(0f,0f,90f));
     }
 }

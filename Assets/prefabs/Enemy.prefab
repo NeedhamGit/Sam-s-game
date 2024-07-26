@@ -125,8 +125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   _gravity: 0.6
-  speed: 2
   _yVelocity: 0
+  coin: {fileID: 595007696771698336, guid: 328a435b1bdc02e459c16de8442cba39, type: 3}
 --- !u!143 &5140652205699676328
 CharacterController:
   m_ObjectHideFlags: 0
